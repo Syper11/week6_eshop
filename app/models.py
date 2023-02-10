@@ -66,8 +66,8 @@ class  Product(db.Model):
     
 
 
-    def __init__(self, item,img_url,price):
-        self.item_name = item
+    def __init__(self, item_name,img_url,price):
+        self.item_name = item_name
         self.img_url = img_url
         self.price = price
   
@@ -75,3 +75,11 @@ class  Product(db.Model):
     def saveToDB(self):
         db.session.add(self)
         db.session.commit()
+
+    def to_dict(self):
+        return {
+            'id': self.item_id,
+            'item_name': self.item_name,
+            'img_url': self.img_url,
+            'price': self.price
+        }

@@ -1,12 +1,12 @@
 from flask import Blueprint, request
 import requests
-from models import Product, User
+from ...models import Product
 from flask_login import current_user, login_required
 from flask_cors import cross_origin
+
 api = Blueprint('api', __name__)
 
 @api.route('/api/populate')
-@login_required
 def populate():
 
     url = "https://api.nasa.gov/planetary/apod?api_key=kFHR3AFVVyE6UWjaIGXtd1dHO4ey1Z9SZcGlG6J0&start_date=2022-12-01&end_date=2023-01-01"
@@ -32,13 +32,13 @@ def populate():
             
     posts = Product.query.all()
     print(posts)
-    
+
     return {
         'status': 'ok',
         'totalResults': len(posts),
         'posts': [p.to_dict() for p in posts]
     }
-
+    
 @api.route('/api/')
 @login_required
 def homePage():
@@ -46,7 +46,6 @@ def homePage():
     print(posts)
     return {
         'status': 'ok',
-        'message': 'images!'
     }
 
 @api.route('/api/all_products')
@@ -56,7 +55,8 @@ def displayAllProducts():
     print(posts)
     return {
         'status': 'ok',
-        'message': 'all_products!'
+        'totalResults': len(posts),
+        'posts': [p.to_dict() for p in posts]
     }
 
 @api.route('/api/single-product/<product>')
@@ -70,7 +70,6 @@ def displayProduct(product):
 
 
 @api.route('/api/<item_name>', methods = ['GET', 'POST'])
-@login_required
 def addToCart(item_name):
     addedItem = Product.query.filter_by(item_name = item_name).first()
     print(addedItem)
@@ -86,7 +85,6 @@ def addToCart(item_name):
    
 
 @api.route('/api/cart', methods = ['GET', 'POST'])
-@login_required
 def cart():
     
     usercart= current_user.cart
