@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 import requests
-from ...models import Product
+from ...models import Product, User
 from flask_login import current_user, login_required
 from flask_cors import cross_origin
 
@@ -65,7 +65,7 @@ def displayProduct(product):
     print(single_product)
     return {
         'status': 'ok',
-        'message': 'one item!'
+        'single product': single_product.to_dict()
     }
 
 
