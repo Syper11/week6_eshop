@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 import requests
 from ...models import Product, User
+from ..apiauthhelper import basic_auth
 from flask_login import current_user, login_required
 from flask_cors import cross_origin
 
@@ -65,12 +66,14 @@ def displayProduct(product):
     print(single_product)
     return {
         'status': 'ok',
-        'single product': single_product.to_dict()
+        'single product': 'nice'
     }
 
 
 @api.route('/api/<item_name>', methods = ['GET', 'POST'])
 def addToCart(item_name):
+    data = request.json
+
     addedItem = Product.query.filter_by(item_name = item_name).first()
     print(addedItem)
     # if addedItem:
@@ -82,23 +85,6 @@ def addToCart(item_name):
 
 
 
-   
-
-@api.route('/api/cart', methods = ['GET', 'POST'])
-def cart():
-    
-    usercart= current_user.cart
-
-    grand_total = 0
-    for item in usercart:
-        grand_total += item.price
-
-    return {
-        'status': 'ok',
-        'message': 'cart!'
-    }
-
-    
 
 @api.route('/api/cart/<string:item_name>', methods=['GET', 'POST'])
 @login_required
@@ -130,4 +116,35 @@ def removeAllFromCart():
     return {
         'status': 'ok',
         'message': 'all gone!'
+    }
+
+@api.route('/api/signup', methods=["POST"])
+def signupAPI():
+    data = request.json
+
+    first_name = data['first_name']
+    last_name = data['last_name']
+    username = data['username']
+    email = data['email']
+    password = data['password']
+            
+
+            # add user to database
+    user = User(first_name, last_name, username, email, password)
+
+    user.saveToDB()
+
+    return {
+        'status': 'ok',
+        'message': "Succesffuly created an account!"
+    }
+
+
+@api.route('/api/login', methods=["POST"])
+@basic_auth.login_required
+def getToken():
+    user = basic_auth.current_user()
+    return {
+        'status': 'ok',
+        'user': user.to_dict(),
     }
