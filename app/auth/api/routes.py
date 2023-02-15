@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 import requests
 from ...models import Product, User
-from ..apiauthhelper import basic_auth
+from ..apiauthhelper import basic_auth_required, token_auth_required, basic_auth, token_auth
 from flask_login import current_user, login_required
 from flask_cors import cross_origin
 
@@ -40,18 +40,23 @@ def populate():
         'posts': [p.to_dict() for p in posts]
     }
     
-@api.route('/api/')
-@login_required
-def homePage():
-    posts = Product.query.all()
-    print(posts)
-    return {
+@api.route('/api/cart/add')
+@token_auth.login_required
+def addToCartAPI():
+    data = request.json
+    user = token_auth.current_user()
+
+    c = User(user.id, data['productId'])
+    c.saveToCart()
+
+    return{
         'status': 'ok',
+        'message': 'Succesfully added'
     }
+   
 
 @api.route('/api/all_products')
 def displayAllProducts():
-    
     posts = Product.query.all()
     print(posts)
     return {
@@ -60,63 +65,12 @@ def displayAllProducts():
         'posts': [p.to_dict() for p in posts]
     }
 
-@api.route('/api/single-product/<product>')
-def displayProduct(product):
-    single_product = Product.query.filter_by(item_id=product).first
-    print(single_product)
-    return {
-        'status': 'ok',
-        'single product': 'nice'
-    }
+@api.get('/api/cart/get')
+@token_auth.login_required
+def getCartAPI():
+    user = token_auth.current_user()
 
 
-@api.route('/api/<item_name>', methods = ['GET', 'POST'])
-def addToCart(item_name):
-    data = request.json
-
-    addedItem = Product.query.filter_by(item_name = item_name).first()
-    print(addedItem)
-    # if addedItem:
-    current_user.saveToCart(addedItem)
-    return {
-        'status': 'ok',
-        'message': 'added item!'
-    }
-
-
-
-
-@api.route('/api/cart/<string:item_name>', methods=['GET', 'POST'])
-@login_required
-def removeFromCart(item_name):
-    print(item_name)
-    deletedcart = Product.query.filter_by(item_name=item_name).first()
-    # deletedcart = current_user.cart
-    print(deletedcart)
-    if deletedcart:
-        current_user.deleteFromCart(deletedcart)
-
-    
-    return {
-        'status': 'ok',
-        'message': 'bye!'
-    }
-
-
-
-@api.route('/api/cart/delete-cart>', methods=['GET', 'POST'])
-@login_required
-def removeAllFromCart():
-    
-    # deletedcart = Product.query.filter_by(item_name=item_name).all() 
-    ## what does each argument mean here? which is which?
-
-    current_user.deleteAllFromCart()
-
-    return {
-        'status': 'ok',
-        'message': 'all gone!'
-    }
 
 @api.route('/api/signup', methods=["POST"])
 def signupAPI():

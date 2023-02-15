@@ -9,24 +9,24 @@ db = SQLAlchemy()
 
 
 addproduct = db.Table('cart',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-    db.Column('product_id', db.Integer, db.ForeignKey('product.item_id'), primary_key=True)
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('product_id', db.Integer, db.ForeignKey('product.item_id', ondelete='CASCADE'), primary_key=True)
 )
 
 
 class  User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(50), nullable=False, unique=True)
-    last_name = db.Column(db.String(50), nullable=False, unique=True)
+    first_name = db.Column(db.String(50), nullable=False, unique=False)
+    last_name = db.Column(db.String(50), nullable=False, unique=False)
     username = db.Column(db.String(45), nullable=False, unique=True)
     email = db.Column(db.String(150), nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
     apitoken = db.Column(db.String)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     cart = db.relationship("Product",
+        cascade = "all, delete",
         secondary = addproduct,
         backref=db.backref('addtocart', lazy='dynamic'),
-        
         lazy='dynamic'
 
     )
@@ -45,11 +45,11 @@ class  User(db.Model, UserMixin):
         db.session.commit()
 
     def saveToCart(self, product):
-        self.cart.append(product) # what does save mean?
+        self.cart.append(product)
         db.session.commit()
 
-    def deleteFromCart(self, product): ## why is this method in the user class?
-        # self.cart.delete(user)
+    def deleteFromCart(self, product):
+
         self.cart.remove(product) ## should we add a deleteEntireCart method? (is it better to delete via the models or via the route?) (if models, we could use a from user TRUNCATE TABLE method...)
         db.session.commit()
 
