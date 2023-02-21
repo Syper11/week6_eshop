@@ -40,18 +40,21 @@ def populate():
         'posts': [p.to_dict() for p in posts]
     }
     
-@api.route('/api/cart/add')
+@api.post('/api/cart/add')
 @token_auth.login_required
 def addToCartAPI():
     data = request.json
     user = token_auth.current_user()
 
-    c = User(user.id, data['productId'])
-    c.saveToCart()
+    product_id = data['productId']
+    product = Product.query.get(product_id)
+
+    
+    user.saveToCart(product)
 
     return{
         'status': 'ok',
-        'message': 'Succesfully added'
+        'message': f'Succesfully added "{product.item_name}"'
     }
    
 
@@ -69,6 +72,30 @@ def displayAllProducts():
 @token_auth.login_required
 def getCartAPI():
     user = token_auth.current_user()
+    cart = [Product.query.get(c.product.id).to_dict() for c in user.cart]
+    
+    return {
+        'status': 'ok',
+        'cart': cart
+    }
+
+@api.post('/api/cart/remove')
+@token_auth.login_required
+def removeFromCartAPI():
+    data = request.json
+    user = token_auth.current_user()
+
+    product_id = data['productId']
+    
+
+    c = User.query.filter_by(user_id=user.id).filter_by(product_id=product_id).first()
+    print(c)
+    c.deleteFromCartt(product_id)
+    
+    return {
+        'status': 'ok',
+        'message': 'Succesfully removed item from cart!'
+    }
 
 
 
