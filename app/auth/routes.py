@@ -46,7 +46,7 @@ def login():
                 #if user ecxists, check if passwords match
                 if user.password == password:
                     login_user(user)
-                    return redirect(url_for('homepage'))
+                    return redirect(url_for('homePage'))
                 else:
                     print('wrong password')
 

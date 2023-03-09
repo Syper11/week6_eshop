@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container col-3">
+    <div class="row justify-content-center">
+        <h1>Single Post</h1>
+    </div>
+</div>
+<div class="row">
+    
+
+            <div class="card" style="width: 18rem;" >
+                
+                <a class="text-dark text-decoration-none" href="">
+                    <img src="{{ single_product.img_url }}" class="card-img-top" alt="{{ single_product.title }}">
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ single_product.item_name }} </h5>
+                        <p class="card-text">${{ single_product.price }}.00</p>
+                        <a class="btn btn-warning" action="{{ url_for('addToCart', item_name = single_product.item_name) }}" href="{{ url_for('addToCart', item_name = single_product.item_name) }}">Add to Cart</a>
+                    </div>
+                </a>
+                
+            </div>
+
+    
+</div>
+
+{% endblock %}

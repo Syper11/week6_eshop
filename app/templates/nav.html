@@ -3,10 +3,12 @@
         <div class="row">
           <header id="header">
           <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="container">
             <ul class="navbar-nav">
+          
               {% if current_user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('displayAllProducts')}}">All Products</a>
               </li>
               <li>
                 <a href="/cart"><i class="fa-solid fa-cart-shopping"></i></a>
@@ -28,6 +30,7 @@
 
             
             </ul>
+          </div>
           </div>
           </header>
         </div> 

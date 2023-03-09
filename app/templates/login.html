@@ -1,13 +1,13 @@
 {% include 'base.html' %}
 {% block content %}
 
-<div class="container col-4">
+<div id="login" class="container col-4">
     <div class="pic">
-        <div class="card" style="width: 25rem;">
-            <div class="card-body">
+        <div id="sign_up_card" class="card " style="width: 25rem;">
+            <div  class="card-body">
               <h2 class="card-title">Sign In</h2>
             </div>
-            <div class="mb-4">
+            <div  class="mb-4">
                 <label for="formGroupExampleInput" class="form-label">Enter in your Username and password here!</label>
             <form method="POST">
                 {{ form.hidden_tag() }}
@@ -25,8 +25,8 @@
               </div>
             </div>
             <div>
-                <p class="test"> New To E-shop?</p>
-                <a id="create" href="/signup" class="mb-3 btn btn-light">Create Your E-shop Account</a>
+                <br>
+                <a id="create" href="/signup" class="mb-3 btn btn-light">Create Your Cosmic Account</a>
             </div>
         </div>
     </div>

@@ -1,37 +1,48 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Shopping Cart</h1>
 
-<h5>Your Items:</h5>
 
-{{message}}
+<div class="container col-3">
+    <h1 id="title">Shopping Cart</h1>
 
-{% for post in usercart %}
+    <h5 id="title">Your Items:</h5>
 
-<div class="container">
+    {% for post in usercart %}
+    <!-- {% print(usercart) %} -->
+
     <div class="row">
-        <div class="card" style="width: 18rem;">
+        <div class="column">
+            <div class="cart card" style="width: 18rem;">
 
-            <form action="{{ url_for('removeFromCart', item_name = post.item) }}" method="POST">
-            <li>
+
+
                 <a class="text-dark text-decoration-none" href="#">
                     <img src="{{ post.img_url }}" class="card-img-top" alt="{{ post.title }}">
                     <div class="card-body">
-                        <h5 class="card-title">{{ post.item }} </h5>
+                        <h5 class="card-title">{{ post.item_name }} </h5>
                         <p class="card-text">${{ post.price }}.00</p>
                     </div>
                 </a>
-            </li>
-            <a type="submit" class="btn btn-danger"
-                href="{{ url_for('removeFromCart', item_name = post.item) }}"  action="">Delete</a>
 
-            </form>
+                <a type="button" class="btn btn-danger"
+                    href="{{ url_for('removeFromCart', item_name = post.item_name) }}" action="">Delete</a>
+
+
+            </div>
         </div>
     </div>
-</div>
-{% endfor %}
+    {% endfor %}
+    <h3 id="title">Grand Total:${{ grand_total }}</h3>
+    <a type="button" class="btn btn-success" href="#" action="">Purchase</a>
 
-<h6>Grand Total:</h6>
+    <h1 id="title">OR</h1> 
+    <a type="button" class="btn btn-danger" href="{{ url_for('removeAllFromCart') }}" action="">Delete All</a>
+    <br>
+    <br>
+    <br>
+
+</div>
+
 
 {% endblock %}

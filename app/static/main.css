@@ -4,3 +4,71 @@ i{
     padding-right: .3em;
 }
 
+.cart{
+    padding: 1em;
+    margin: .5em;
+}
+
+#login{
+    padding-top: 80px;
+    color: white;
+}
+
+#sign_up_card{
+    background-color: black;
+}
+
+body,html{
+    top: 0; 
+    left: 0; 
+      
+   
+    min-width: 100%;
+    min-height: 100%;
+    background-image: url(galaxy.jpg);
+}
+
+nav{
+    background-color: rgb(35, 3, 93);
+}
+
+.pic{
+    padding-top: 11rem;
+}
+
+
+.card{
+    border-style: solid;
+}
+
+
+#sale_post{
+    padding-left: 2rem;
+}
+
+#title{
+    font-weight: bold;
+    color: chartreuse;
+}
+
+
+footer{
+    bottom: 0px;
+    width: 100%;
+    background-color: black;
+    height: 3%;
+    margin: 0px;
+    position: fixed;
+}
+
+footer div{
+    text-align: center;
+    color: white;
+}
+
+ footer hr{
+    margin-top: 5px;
+    height: 30px;
+    border: 0px;
+    box-shadow: inset 0px 20px 20px -15px white
+}
